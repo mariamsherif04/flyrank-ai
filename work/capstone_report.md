@@ -46,4 +46,4 @@ This is a fair comparison because it's evaluated on the exact same held-out clie
 |---|---|---|
 | Baseline rule | 0.62 | 0.52 |
 | Logistic Regression | 0.66 | 0.52 |
-|
+
