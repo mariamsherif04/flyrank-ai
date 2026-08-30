@@ -67,12 +67,24 @@ jobs:
               pass
           final = url.startswith("https://")
           bad = []
+          placeholder_prefixes = (
+              "# This cell is for CODE (numbers, a query, a check).",
+              "# Write your text answer in the cell ABOVE this one",
+          )
           for p in sorted(glob.glob("work/notebooks/*.ipynb")):
               try:
                   nb = json.load(open(p))
               except Exception:
                   continue
-              code = [c for c in nb.get("cells", []) if c.get("cell_type") == "code"]
+              code = []
+              for c in nb.get("cells", []):
+                  if c.get("cell_type") != "code":
+                      continue
+                  lines = [line.rstrip("\n") for line in c.get("source", [])]
+                  non_blank = [line.strip() for line in lines if line.strip()]
+                  if non_blank and all(line.startswith(placeholder_prefixes) for line in non_blank):
+                      continue
+                  code.append(c)
               src = sum(len("".join(c.get("source", []))) for c in code)
               has_out = any(c.get("outputs") for c in code)
               if code and src > 200 and not has_out:
