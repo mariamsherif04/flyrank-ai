@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Page Should You Refresh First? A Ranked Approach to Content Decline</title>
+<style>
+  :root {
+    --ink: #1c1f26;
+    --muted: #5b6270;
+    --line: #e4e7ec;
+    --accent: #2f5496;
+    --accent-soft: #eef2f9;
+    --bg: #fbfbfa;
+    --card: #ffffff;
+    --good: #2e7d5b;
+    --warn: #b5651d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+  header.hero { margin-bottom: 48px; }
+  .kicker {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.25;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .abstract {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    border-radius: 6px;
+    font-size: 15.5px;
+    color: #2a2e37;
+  }
+  .abstract strong { color: var(--ink); }
+  section { margin-top: 52px; }
+  h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  p { font-size: 16.5px; color: #2a2e37; margin: 0 0 16px; }
+  ul, ol { padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 8px; font-size: 16px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  th { color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  tr:last-child td { border-bottom: none; }
+  .metric-row.best td { font-weight: 700; color: var(--accent); }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+  .chart-card img { width: 100%; display: block; border-radius: 4px; }
+  .caption {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-style: italic;
+  }
+  .callout {
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 15px;
+    margin: 20px 0;
+  }
+  .callout.warn { background: #fbf2e9; }
+  .tag {
+    display: inline-block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .action-list li { font-size: 15px; }
+  code {
+    background: #f0f1f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13.5px;
+  }
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Refresh / Content Opportunity Scoring — Capstone</div>
+    <h1>Which Page Should You Refresh First? A Ranked, Honestly-Validated Approach to Content Decline</h1>
+    <div class="byline">Mariam Sherif · FlyRank ML Internship Capstone · 2026</div>
+    <div class="abstract">
+      <strong>Abstract.</strong> Content teams tracking hundreds of pages per client need a way to decide
+      which page to review first when performance slips. I built a ranking system that scores pages by
+      likely decline, using 30,000 real (pseudonymized) content records across 32 clients. A transparent
+      staleness-based rule reached a precision@50 of 0.62; a Random Forest, validated on entirely unseen
+      clients, reached 0.68 — but permutation importance revealed the rule's core assumption (staleness
+      drives decline) does not hold once tested honestly, with visibility signals mattering far more.
+      The result is a ranked, reason-coded review queue an editor can act on today, alongside an honest
+      account of where this approach's confidence ends.
+    </div>
+  </header>
+
+  <section>
+    <h2>Introduction</h2>
+    <p>
+      Content that ranks well in search quietly decays over time — rankings slip, clicks drop, and most
+      teams notice too late. For a team tracking hundreds or thousands of pages per client, the practical
+      question is never "is anything declining?" — it's <em>which page should a human look at first?</em>
+    </p>
+    <p>
+      That is a ranking problem, not a simple yes/no classification. An editor with limited time needs a
+      short, trustworthy list, not a flood of "this might be declining" flags. This work builds and
+      honestly tests one such ranking system, using it as an opportunity to test whether a common
+      assumption — "the older and more neglected a page is, the more likely it's declining" — actually
+      survives contact with validated data.
+    </p>
+  </section>
+
+  <section>
+    <h2>Data</h2>
+    <p>
+      This work uses FlyRank's pseudonymized ML-internship starter release:
+      <code>content_refresh_anonymized.csv</code> — 30,000 rows, one per content item, spanning 32
+      pseudonymized clients, with trailing-90-day search performance metrics per item.
+    </p>
+    <ul>
+      <li><strong>Features used:</strong> content age, days since last update, 90-day impressions, average search position, click-through rate, word count.</li>
+      <li><strong>Excluded fields:</strong> <code>trend_direction</code> and <code>trend_pct</code> — these define the label itself, so using them as features would be circular (leakage).</li>
+      <li><strong>Context-only fields:</strong> <code>content_id</code> and <code>client_id</code> — used solely for grouping and train/test splitting, never as model inputs.</li>
+    </ul>
+    <div class="callout">
+      No client names, domains, or raw queries appear anywhere in this dataset or this page — all
+      identifiers are pseudonymized hashes.
+    </div>
+  </section>
+
+  <section>
+    <h2>Methodology</h2>
+    <p>
+      <strong>Label.</strong> A page is labeled "declining" if its current trend direction is downward —
+      an observed, current-window signal. This is a real limitation (see below): it does not confirm the
+      decline will continue.
+    </p>
+    <p>
+      <strong>Baseline.</strong> A transparent, hand-written rule: a page is flagged if it hasn't been
+      updated in 180+ days <em>and</em> still receives 500+ impressions in the last 90 days — reasoning
+      that a page which used to matter but has gone stale is worth a look.
+    </p>
+    <p>
+      <strong>Model.</strong> Logistic Regression, then a Random Forest — chosen because the underlying
+      task is ranking a continuous risk score, not producing a fixed label. Simplicity first, complexity
+      only where it earned its place.
+    </p>
+    <p>
+      <strong>Validation design.</strong> Client-grouped train/test split (25% of clients held out
+      entirely), not row-random. A random split would let the same client appear in both sides, letting
+      the model learn client-specific quirks instead of a signal that generalizes to a client it has
+      never seen — the honest version of this question.
+    </p>
+    <p>
+      <strong>Leakage check.</strong> <code>trend_direction</code> and <code>trend_pct</code> — the fields
+      the label is computed from — were explicitly excluded from every feature set.
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <p>All three methods evaluated on the identical held-out clients, at the same metric.</p>
+    <table>
+      <tr><th>Method</th><th>Precision@50</th><th>Base rate</th></tr>
+      <tr class="metric-row"><td>Baseline rule</td><td>0.62</td><td>0.52</td></tr>
+      <tr class="metric-row"><td>Logistic Regression</td><td>0.66</td><td>0.52</td></tr>
+      <tr class="metric-row best"><td>Random Forest</td><td>0.68</td><td>0.52</td></tr>
+    </table>
+    <div class="chart-card">
+      <img src="results_chart.png" alt="Bar chart comparing precision@50 for the baseline rule, logistic regression, and random forest, with the base rate marked as a dashed line">
+      <div class="caption">Figure 1 — Precision@50 by method. All three comfortably beat the ~0.52 base rate; the Random Forest edges out the transparent baseline by roughly 6 points.</div>
+    </div>
+    <p>
+      Reading the errors matters more than the headline number. Permutation importance — which measures
+      the actual drop in performance when a feature is shuffled, a more honest signal than a model's
+      built-in importance score — surfaced something the metric alone would have hidden:
+    </p>
+    <table>
+      <tr><th>Feature</th><th>Permutation importance</th></tr>
+      <tr><td>90-day impressions</td><td>0.0598</td></tr>
+      <tr><td>Average position</td><td>0.0236</td></tr>
+      <tr><td>Content age</td><td>0.0205</td></tr>
+      <tr><td>Click-through rate</td><td>0.0133</td></tr>
+      <tr><td>Word count</td><td>-0.0086</td></tr>
+      <tr><td>Days since last update</td><td>-0.0112</td></tr>
+    </table>
+    <div class="callout warn">
+      <strong>The twist.</strong> <code>days_since_last_update</code> — the entire basis of the baseline
+      rule — has <em>negative</em> permutation importance. Once validated across clients the model has
+      never seen, staleness behaves as noise, not signal. Visibility metrics (impressions, position) carry
+      the real predictive weight.
+    </div>
+  </section>
+
+  <section>
+    <h2>Limitations &amp; Honest Framing</h2>
+    <ul>
+      <li>The label is <strong>current-window</strong>, not future — it says a page is trending down now, not that it will still be declining next month. A genuinely predictive version of this work would need a forward-looking label built from a past→future split.</li>
+      <li>This is a single pseudonymized snapshot dataset covering 32 clients; findings describe patterns <strong>observed</strong> in this data, not a universal law of content decay.</li>
+      <li>These results are <strong>directional and decision-support</strong> only — they identify pages worth a human review, not a guarantee that refreshing them will reverse a decline, and they make no claim about how any search engine's ranking algorithm works.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Ranked Recommendations</h2>
+    <p>Based on the validated model, the action playbook for a content team is:</p>
+    <ol class="action-list">
+      <li><span class="tag">Priority 1</span> Review pages the model scores above 0.8 — high visibility combined with a risk signal the model has learned to weight, not staleness alone.</li>
+      <li><span class="tag">Priority 2</span> Deprioritize "stale but quiet" pages — low-impression, long-untouched pages that the old rule would have flagged, but which show no real risk signal once validated.</li>
+      <li><span class="tag">Re-check</span> Treat any single flagged page as a suggestion to look, not a verdict — confirm against the page's own recent history before committing editor time.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Reproducibility</h2>
+    <p>
+      Every result on this page is generated directly by the capstone notebook in the linked repository —
+      rerunning it with the same random seed (<code>random_state=42</code>) reproduces this table exactly.
+    </p>
+    <ul>
+      <li>Capstone notebook: <a href="https://github.com/mariamsherif04/flyrank-ai/blob/main/work/notebooks/capstone.ipynb">work/notebooks/capstone.ipynb</a></li>
+      <li>Baseline notebook: <a href="https://github.com/mariamsherif04/flyrank-ai/blob/main/work/notebooks/w04_baseline_score.ipynb">work/notebooks/w04_baseline_score.ipynb</a></li>
+      <li>Modeling notebook: <a href="https://github.com/mariamsherif04/flyrank-ai/blob/main/work/notebooks/w05_model.ipynb">work/notebooks/w05_model.ipynb</a></li>
+      <li>Full repository: <a href="https://github.com/mariamsherif04/flyrank-ai">github.com/mariamsherif04/flyrank-ai</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    Built on the FlyRank ML Internship dataset — <a href="https://flyrank.ai">flyrank.ai</a>.
+  </footer>
+
+</div>
+</body>
+</html>
