@@ -148,13 +148,15 @@
     <div class="byline">Mariam Sherif · FlyRank ML Internship Capstone · 2026</div>
     <div class="abstract">
       <strong>Abstract.</strong> Content teams tracking hundreds of pages per client need a way to decide
-      which page to review first when performance slips. I built a ranking system that scores pages by
-      likely decline, using 30,000 real (pseudonymized) content records across 32 clients. A transparent
-      staleness-based rule reached a precision@50 of 0.62; a Random Forest, validated on entirely unseen
-      clients, reached 0.68 — but permutation importance revealed the rule's core assumption (staleness
-      drives decline) does not hold once tested honestly, with visibility signals mattering far more.
-      The result is a ranked, reason-coded review queue an editor can act on today, alongside an honest
-      account of where this approach's confidence ends.
+      which page to review first when performance slips. This work uses FlyRank's pseudonymized
+      ML-internship dataset — 30,000 content records across 32 clients — to build and honestly validate a
+      per-page decline-risk ranking. A transparent staleness-based rule is compared against Logistic
+      Regression and a Random Forest, evaluated identically on clients held out entirely from training.
+      The baseline rule reached a precision@50 of 0.62 against a 0.52 base rate; the Random Forest reached
+      0.68, and permutation importance showed the rule's core assumption — that staleness drives decline —
+      does not hold once tested honestly, with visibility signals mattering far more. The result is a
+      ranked, reason-coded review queue an editor can act on today, alongside an honest account of where
+      this approach's confidence ends.
     </div>
   </header>
 
@@ -171,6 +173,16 @@
       honestly tests one such ranking system, using it as an opportunity to test whether a common
       assumption — "the older and more neglected a page is, the more likely it's declining" — actually
       survives contact with validated data.
+    </p>
+    <p>
+      <strong>Unit of analysis and cost of a wrong call.</strong> The unit scored here is a single content
+      page. The output is a per-page risk score that produces a ranked review queue; the action a human
+      takes is opening the highest-scored pages first and deciding whether to refresh them. Getting this
+      wrong has an asymmetric cost: a false positive burns limited editor time reviewing a page that was
+      never actually at risk, while a false negative lets a genuinely declining page sit unreviewed until
+      the drop is harder to reverse. Ranking (not just flagging) matters because it lets a team spend that
+      limited time on the pages most likely to be worth it, rather than treating every flagged page as
+      equally urgent.
     </p>
   </section>
 
@@ -254,6 +266,16 @@
       never seen, staleness behaves as noise, not signal. Visibility metrics (impressions, position) carry
       the real predictive weight.
     </div>
+    <p>
+      <strong>Where the two methods disagree.</strong> Looking at the held-out pages directly: most of the
+      Random Forest's gains over the baseline come from pages the rule missed entirely — high-impression,
+      slipping-position pages that hadn't gone stale by the 180-day cutoff, so the rule never looked at
+      them. Conversely, the rule's false positives cluster on exactly the "stale but quiet" pages the
+      permutation-importance result predicts it would misjudge: long-untouched pages with low current
+      impressions, which the rule flags on age alone but the model correctly scores as low-risk. The two
+      methods aren't failing randomly — the rule's errors are systematic and traceable directly to the
+      assumption permutation importance shows is wrong.
+    </p>
   </section>
 
   <section>
